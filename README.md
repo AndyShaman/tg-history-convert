@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Telegram → NotebookLM Converter
 
-## Getting Started
+Веб-приложение для конвертации экспорта чата Telegram в Markdown-файлы, оптимизированные для загрузки в Google NotebookLM.
 
-First, run the development server:
+🔗 **Demo:** [tg-history-convert.vercel.app](https://tg-history-convert.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Возможности
+
+- 📁 Drag & drop загрузка JSON-файла
+- 🔒 Полностью клиентская обработка (данные не отправляются на сервер)
+- ✂️ Автоматическая разбивка на файлы по 3000 слов
+- 📦 Скачивание результата в ZIP-архиве
+- ⚙️ Настройки: лимит слов, формат даты, включение/отключение автора и времени
+
+## Как использовать
+
+### 1. Экспортируйте чат из Telegram Desktop
+
+1. Откройте Telegram Desktop
+2. Откройте нужный чат
+3. Нажмите `⋮` → **Экспорт истории чата**
+4. Выберите формат **JSON**
+5. Нажмите **Экспортировать**
+
+### 2. Конвертируйте на сайте
+
+1. Откройте [tg-history-convert.vercel.app](https://tg-history-convert.vercel.app)
+2. Перетащите файл `result.json` в зону загрузки
+3. Настройте параметры (опционально)
+4. Нажмите **Конвертировать**
+5. ZIP-архив скачается автоматически
+
+### 3. Загрузите в NotebookLM
+
+1. Откройте [NotebookLM](https://notebooklm.google.com)
+2. Создайте новый ноутбук
+3. Загрузите `.md` файлы из архива как источники
+
+## Формат выходных файлов
+
+```markdown
+# Название чата
+Часть 1 из 42
+
+---
+
+**Иван Петров** 14.02.2024 13:36
+Текст сообщения здесь
+
+**Мария Сидорова** 14.02.2024 13:37
+Ответ на сообщение
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Технические детали
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Обработка сообщений
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Фильтруются только `type: "message"` (служебные сообщения пропускаются)
+- Пустые сообщения и медиа без текста пропускаются
+- Поле `text` обрабатывается как строка или массив объектов
+- Если `from` равен `null`, используется "Аноним"
 
-## Learn More
+### Разбивка на файлы
 
-To learn more about Next.js, take a look at the following resources:
+- Максимум 3000 слов на файл (настраивается от 1000 до 5000)
+- Сообщение никогда не разрывается между файлами
+- Если одно сообщение превышает лимит — выносится в отдельный файл
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Ограничения
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Максимальный размер файла: 500 MB
+- Обработка происходит в браузере (большие файлы могут занять время)
 
-## Deploy on Vercel
+## Локальная разработка
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Установка зависимостей
+npm install
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Запуск dev-сервера
+npm run dev
+
+# Сборка
+npm run build
+```
+
+## Технологии
+
+- [Next.js 14](https://nextjs.org/) — React-фреймворк
+- [TypeScript](https://www.typescriptlang.org/) — типизация
+- [Tailwind CSS](https://tailwindcss.com/) — стилизация
+- [JSZip](https://stuk.github.io/jszip/) — создание ZIP-архивов
+- [Vercel](https://vercel.com/) — хостинг
+
+## Лицензия
+
+MIT
