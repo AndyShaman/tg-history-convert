@@ -52,17 +52,17 @@ export function FileDropzone({ onFileSelect, disabled }: FileDropzoneProps) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`dropzone p-8 text-center ${isDragging ? 'dragging' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+      className={`dropzone p-8 text-center relative ${isDragging ? 'dragging' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <input
         type="file"
         accept=".json"
         onChange={handleFileInput}
         disabled={disabled}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed z-20"
       />
 
-      <div className="relative z-10 flex flex-col items-center gap-4">
+      <div className="relative z-10 flex flex-col items-center gap-4 pointer-events-none">
         <div className="w-16 h-16 rounded-2xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-center text-3xl">
           {selectedFile ? '✓' : '📁'}
         </div>
