@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Telegram → NotebookLM | Конвертер чатов",
   description: "Конвертируйте экспорт чата Telegram в файлы для загрузки в Google NotebookLM",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

@@ -151,10 +151,19 @@ export default function Home() {
           </div>
 
           {/* Footer */}
-          <footer className="text-center opacity-0 animate-fade-in-up stagger-3">
+          <footer className="text-center opacity-0 animate-fade-in-up stagger-3 space-y-2">
             <p className="text-sm text-[var(--muted)]">
               🔒 Все данные обрабатываются локально в браузере
             </p>
+            <a
+              href="https://t.me/AI_Handler"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
+            >
+              <span>✈️</span>
+              <span>@AI_Handler</span>
+            </a>
           </footer>
         </div>
       </main>
