@@ -14,7 +14,7 @@ import { ErrorMessage } from '@/components/ErrorMessage';
 type AppState = 'idle' | 'processing' | 'done' | 'error';
 
 const DEFAULT_SETTINGS: ConversionSettings = {
-  wordLimit: 3000,
+  wordLimit: 50000,
   includeTimestamp: true,
   includeAuthor: true,
   dateFormat: 'DD.MM.YYYY',

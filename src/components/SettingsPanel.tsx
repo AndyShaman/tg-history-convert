@@ -22,16 +22,23 @@ export function SettingsPanel({ settings, onChange, disabled }: SettingsPanelPro
           <label className="block text-sm text-[var(--muted)]">
             Слов в файле
           </label>
-          <input
-            type="number"
-            min={1000}
-            max={5000}
-            step={500}
+          <select
             value={settings.wordLimit}
             onChange={(e) => onChange({ ...settings, wordLimit: Number(e.target.value) })}
             disabled={disabled}
             className="w-full px-4 py-3 input-field disabled:opacity-50"
-          />
+          >
+            <option value={50000}>50 000</option>
+            <option value={100000}>100 000</option>
+            <option value={150000}>150 000</option>
+            <option value={200000}>200 000</option>
+            <option value={250000}>250 000</option>
+            <option value={300000}>300 000</option>
+            <option value={350000}>350 000</option>
+            <option value={400000}>400 000</option>
+            <option value={450000}>450 000</option>
+            <option value={500000}>500 000</option>
+          </select>
         </div>
 
         {/* Date format */}
