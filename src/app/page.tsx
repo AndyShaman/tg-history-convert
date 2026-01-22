@@ -18,6 +18,9 @@ const DEFAULT_SETTINGS: ConversionSettings = {
   includeTimestamp: true,
   includeAuthor: true,
   dateFormat: 'DD.MM.YYYY',
+  includeReactions: true,
+  includePolls: true,
+  includeForwarded: true,
 };
 
 export default function Home() {

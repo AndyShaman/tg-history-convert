@@ -1,4 +1,4 @@
-import type { ParsedMessage, ConversionSettings } from '@/types/telegram';
+import type { ParsedMessage, ConversionSettings, TelegramReaction, TelegramPoll } from '@/types/telegram';
 
 /**
  * Formats a date according to settings
@@ -18,26 +18,73 @@ function formatDate(date: Date, format: 'DD.MM.YYYY' | 'YYYY-MM-DD'): string {
 }
 
 /**
+ * Formats reactions as emoji string
+ */
+function formatReactions(reactions: TelegramReaction[]): string {
+  return reactions
+    .map(r => `${r.emoji} ${r.count}`)
+    .join(' • ');
+}
+
+/**
+ * Formats poll as readable text
+ */
+function formatPoll(poll: TelegramPoll): string {
+  const lines: string[] = [];
+  lines.push(`**Poll:** ${poll.question}`);
+  for (const answer of poll.answers) {
+    lines.push(`• ${answer.text} — ${answer.voters} votes`);
+  }
+  lines.push(`Total: ${poll.total_voters} voters`);
+  return lines.join('\n');
+}
+
+/**
  * Formats a single message according to settings
  */
 export function formatMessage(msg: ParsedMessage, settings: ConversionSettings): string {
-  const parts: string[] = [];
+  const lines: string[] = [];
+
+  // Header line: #ID Author Timestamp
+  const headerParts: string[] = [];
+  headerParts.push(`**#${msg.id}**`);
 
   if (settings.includeAuthor) {
-    parts.push(`**${msg.author}**`);
+    headerParts.push(`**${msg.author}**`);
   }
 
   if (settings.includeTimestamp) {
-    parts.push(formatDate(msg.date, settings.dateFormat));
+    headerParts.push(formatDate(msg.date, settings.dateFormat));
   }
 
-  const header = parts.join(' ');
+  lines.push(headerParts.join(' '));
 
-  if (header) {
-    return `${header}\n${msg.text}\n`;
+  // Reply reference (always included)
+  if (msg.replyToId) {
+    lines.push(`↳ reply #${msg.replyToId}`);
   }
 
-  return `${msg.text}\n`;
+  // Forwarded from (if enabled)
+  if (settings.includeForwarded && msg.forwardedFrom) {
+    lines.push(`↳ forwarded from: ${msg.forwardedFrom}`);
+  }
+
+  // Message text
+  if (msg.text) {
+    lines.push(msg.text);
+  }
+
+  // Poll (if enabled)
+  if (settings.includePolls && msg.poll) {
+    lines.push(formatPoll(msg.poll));
+  }
+
+  // Reactions (if enabled)
+  if (settings.includeReactions && msg.reactions && msg.reactions.length > 0) {
+    lines.push(formatReactions(msg.reactions));
+  }
+
+  return lines.join('\n') + '\n';
 }
 
 /**

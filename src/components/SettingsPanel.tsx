@@ -85,6 +85,45 @@ export function SettingsPanel({ settings, onChange, disabled }: SettingsPanelPro
             Имя автора
           </span>
         </label>
+
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <input
+            type="checkbox"
+            checked={settings.includeReactions}
+            onChange={(e) => onChange({ ...settings, includeReactions: e.target.checked })}
+            disabled={disabled}
+            className="checkbox-custom"
+          />
+          <span className="text-sm text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+            Реакции
+          </span>
+        </label>
+
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <input
+            type="checkbox"
+            checked={settings.includePolls}
+            onChange={(e) => onChange({ ...settings, includePolls: e.target.checked })}
+            disabled={disabled}
+            className="checkbox-custom"
+          />
+          <span className="text-sm text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+            Опросы
+          </span>
+        </label>
+
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <input
+            type="checkbox"
+            checked={settings.includeForwarded}
+            onChange={(e) => onChange({ ...settings, includeForwarded: e.target.checked })}
+            disabled={disabled}
+            className="checkbox-custom"
+          />
+          <span className="text-sm text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">
+            Пересланные
+          </span>
+        </label>
       </div>
     </div>
   );

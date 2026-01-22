@@ -1,4 +1,4 @@
-import type { TelegramExport, TelegramMessage, TelegramTextEntity, ParsedMessage } from '@/types/telegram';
+import type { TelegramExport, TelegramTextEntity, ParsedMessage } from '@/types/telegram';
 
 /**
  * Validates that the file is a Telegram export
@@ -23,7 +23,10 @@ function extractText(text: string | TelegramTextEntity[]): string {
   }
 
   if (Array.isArray(text)) {
-    return text.map(entity => entity.text || '').join('');
+    return text.map(entity => {
+      if (typeof entity === 'string') return entity;
+      return entity.text || '';
+    }).join('');
   }
 
   return '';
@@ -42,8 +45,8 @@ export function parseTelegramMessages(data: TelegramExport): ParsedMessage[] {
     // Extract text
     const text = extractText(msg.text).trim();
 
-    // Skip empty messages or media-only messages
-    if (!text) continue;
+    // Skip empty messages without poll (polls have empty text)
+    if (!text && !msg.poll) continue;
 
     // Parse date
     const date = new Date(msg.date);
@@ -52,9 +55,14 @@ export function parseTelegramMessages(data: TelegramExport): ParsedMessage[] {
     const author = msg.from || 'Аноним';
 
     messages.push({
+      id: msg.id,
       author,
       date,
       text,
+      replyToId: msg.reply_to_message_id,
+      reactions: msg.reactions,
+      poll: msg.poll,
+      forwardedFrom: msg.forwarded_from,
     });
   }
 

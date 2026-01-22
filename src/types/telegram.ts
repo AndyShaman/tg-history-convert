@@ -5,6 +5,25 @@ export interface TelegramTextEntity {
   text: string;
 }
 
+export interface TelegramReaction {
+  type: string;
+  count: number;
+  emoji: string;
+}
+
+export interface TelegramPollAnswer {
+  text: string;
+  voters: number;
+  chosen: boolean;
+}
+
+export interface TelegramPoll {
+  question: string;
+  closed: boolean;
+  total_voters: number;
+  answers: TelegramPollAnswer[];
+}
+
 export interface TelegramMessage {
   id: number;
   type: 'message' | 'service';
@@ -18,6 +37,9 @@ export interface TelegramMessage {
   video?: string;
   file?: string;
   forwarded_from?: string;
+  reply_to_message_id?: number;
+  reactions?: TelegramReaction[];
+  poll?: TelegramPoll;
 }
 
 export interface TelegramExport {
@@ -28,9 +50,14 @@ export interface TelegramExport {
 }
 
 export interface ParsedMessage {
+  id: number;
   author: string;
   date: Date;
   text: string;
+  replyToId?: number;
+  reactions?: TelegramReaction[];
+  poll?: TelegramPoll;
+  forwardedFrom?: string;
 }
 
 export interface ConversionSettings {
@@ -38,6 +65,9 @@ export interface ConversionSettings {
   includeTimestamp: boolean;
   includeAuthor: boolean;
   dateFormat: 'DD.MM.YYYY' | 'YYYY-MM-DD';
+  includeReactions: boolean;
+  includePolls: boolean;
+  includeForwarded: boolean;
 }
 
 export interface ConversionResult {
