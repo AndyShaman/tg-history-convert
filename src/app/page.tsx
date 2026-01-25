@@ -39,11 +39,6 @@ export default function Home() {
   const handleConvert = useCallback(async () => {
     if (!file) return;
 
-    if (file.size > 500 * 1024 * 1024) {
-      setError('Файл слишком большой. Максимальный размер: 500MB');
-      return;
-    }
-
     setState('processing');
     setError(null);
 
